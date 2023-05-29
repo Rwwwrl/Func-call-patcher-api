@@ -1,0 +1,121 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap.min.css' %}" />
+    <script src="{% static 'js/bootstrap/bootstrap.bundle.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="alert_block"></div>
+        <table class="table align-middle table-responsive-xxl">
+            <thead>
+                <tr>
+                    <th scope="col">is_active</th>
+                    <th scope="col">path_to_func_in_executable_module</th>
+                    <th scope="col">line_number_where_func_executed</th>
+                    <th scope="col">is method</th>
+                    <th scope="col">decorator inner func</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="patchers_table_body">
+                {% for pk, patcher_data in patchers_data.items %}
+                <tr id="{{ pk }}" class="patcher_data">
+                    {% if patcher_data.is_active %}
+                    <td class="patcher_data_is_active_field active_true">1</td>
+                    {% else %}
+                    <td class="patcher_data_is_active_field active_false">0</td>
+                    {% endif %}
+                    <td>{{ patcher_data.path_to_func_in_executable_module }}</td>
+                    <td>{{ patcher_data.line_number_where_func_executed }}</td>
+                    {% if patcher_data.is_method %}
+                    <td>1</td>
+                    {% else %}
+                    <td>0</td>
+                    {% endif %}
+                    <td>
+                        <pre>{{ patcher_data.decorator_inner_func_as_str }}</pre>
+                    <td>
+                        <button type="button" class="btn btn-primary button_to_change_is_active_state">
+                            change status
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger button_to_delete_patcher">
+                            delete
+                        </button>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            add call patcher
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade modal-lg" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Добавить FuncCallPatcher</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">Path to func in executable
+                                module:</label>
+                            <input type="text" class="form-control path_to_func_in_executable_module_input"
+                                id="formGroupExampleInput">
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">Line where func executed:</label>
+                            <input type="text" class="form-control line_where_func_executed_input"
+                                id="formGroupExampleInput">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="ModalDecoratorInnerFunc" class="form-label">Decorator inner func:</label>
+                            <textarea id="ModalDecoratorInnerFunc" class="form-control decorator_inner_func_input"
+                                aria-label="With textarea" rows="10" style="height:100%;"></textarea>
+                        </div>
+                        <label class="form-check-label" for="flexCheckDefault">
+                            is method
+                        </label>
+                        <input class="form-check-input is_method_input_checkbox" type="checkbox" value=""
+                            id="flexCheckDefault">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary close_modal_button"
+                            data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary approve_modal_button"
+                            data-bs-dismiss="modal">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script src="{% static 'js/index.js' %}"></script>
+</body>
+
+</html>
