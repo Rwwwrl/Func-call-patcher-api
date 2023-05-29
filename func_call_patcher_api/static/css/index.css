@@ -1,0 +1,27 @@
+.container {
+  max-width: 90%;
+}
+
+.alert_block {
+  margin-top: 20px;
+}
+
+.alert {
+  margin-bottom: 10px;
+}
+
+.some_block {
+  color: red;
+}
+
+.modal-body > .input-group {
+  margin-bottom: 10px;
+}
+
+.patcher_data_is_active_field.active_false {
+  background-color: red;
+}
+
+.patcher_data_is_active_field.active_true {
+  background-color: green;
+}
