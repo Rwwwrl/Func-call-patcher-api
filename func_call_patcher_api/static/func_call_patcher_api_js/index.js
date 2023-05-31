@@ -1,3 +1,4 @@
+console.log('loaded')
 let button_to_add_patch = document.querySelector(".button_to_add_patch");
 
 let alert_block = document.querySelector(".alert_block");
