@@ -2,9 +2,8 @@ from typing import List
 
 from func_call_patcher import FuncCallPatcher, MultiFuncCallPatcher
 
-from func_call_patcher_api.func_call_patcher.register import __func_call_patcher_register__
-
-from .func_call_patcher.utils import FuncAsObjectFromStringGetter
+from func_call_patcher_api.logic.register import __func_call_patcher_register__
+from func_call_patcher_api.logic.utils import FuncAsObjectFromStringGetter
 
 
 class FuncCallPatcherMiddleware:

@@ -2,8 +2,7 @@ from typing import List
 
 from func_call_patcher import validators
 
-from func_call_patcher_api.func_call_patcher.register import __func_call_patcher_register__
-
+from .register import __func_call_patcher_register__
 from .utils import FuncAsObjectFromStringGetter, FuncInvalidArgs
 
 
