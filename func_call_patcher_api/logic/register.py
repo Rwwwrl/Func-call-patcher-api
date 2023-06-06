@@ -22,9 +22,6 @@ class PkGenerator:
 
 
 class IFuncCallPatcherRegister(abc.ABC):
-    def __init__(self):
-        self._data: Dict[hints.FuncCallPatcherId, FuncCallPatcherData] = {}
-
     @abc.abstractmethod
     def add(self, func_call_patcher_data: FuncCallPatcherData) -> None:
         raise NotImplementedError
@@ -48,6 +45,9 @@ class IFuncCallPatcherRegister(abc.ABC):
 
 class InMemoryFuncCallPatcherDataRegister(IFuncCallPatcherRegister):
     """реализация, которая хранит все в питоновской памяти"""
+    def __init__(self):
+        self._data: Dict[hints.FuncCallPatcherId, FuncCallPatcherData] = {}
+
     def add(self, func_call_patcher_data: FuncCallPatcherData) -> hints.FuncCallPatcherId:
         pk = PkGenerator.get_and_increase_pk()
         self.data[pk] = func_call_patcher_data
@@ -77,6 +77,3 @@ class InMemoryFuncCallPatcherDataRegister(IFuncCallPatcherRegister):
             pk: func_call_patcher_data
             for (pk, func_call_patcher_data) in self.data.items() if func_call_patcher_data.is_active
         }
-
-
-__func_call_patcher_register__ = InMemoryFuncCallPatcherDataRegister()

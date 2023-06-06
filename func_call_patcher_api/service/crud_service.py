@@ -1,5 +1,6 @@
 from func_call_patcher_api import hints
-from func_call_patcher_api.logic.register import FuncCallPatcherData, __func_call_patcher_register__
+from func_call_patcher_api.dependency_container import __dependency_container__
+from func_call_patcher_api.logic.register import FuncCallPatcherData
 from func_call_patcher_api.logic.validators import validate
 
 
@@ -7,11 +8,11 @@ class CRUDService:
     """CRUD над FuncCallPatcherData"""
     @staticmethod
     def update_is_active_state(pk: hints.FuncCallPatcherId) -> None:
-        __func_call_patcher_register__.change_is_active_state(pk=pk)
+        __dependency_container__.func_call_patcher_data_register().change_is_active_state(pk=pk)
 
     @staticmethod
     def delete(pk: hints.FuncCallPatcherId) -> None:
-        __func_call_patcher_register__.remove(pk=pk)
+        __dependency_container__.func_call_patcher_data_register().remove(pk=pk)
 
     @staticmethod
     def create_new_func_call_patcher_data(
@@ -35,5 +36,7 @@ class CRUDService:
             decorator_inner_func_as_str=decorator_inner_func_as_str,
         )
 
-        new_patch_pk = __func_call_patcher_register__.add(func_call_patcher_data=func_call_patch_data)
+        new_patch_pk = __dependency_container__.func_call_patcher_data_register().add(
+            func_call_patcher_data=func_call_patch_data,
+        )
         return new_patch_pk
