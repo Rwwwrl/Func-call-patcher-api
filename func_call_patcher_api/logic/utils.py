@@ -18,7 +18,7 @@ class FuncAsObjectFromStringGetter:
 
     @staticmethod
     def _validate_args(func: Callable):
-        valid_args = ('func', 'func_args', 'func_kwargs', 'frame')
+        valid_args = ('func', 'func_args', 'func_kwargs', 'frame', 'relationship_identifier')
         func_args = func.__code__.co_varnames
         if func_args != valid_args:
             raise FuncInvalidArgs(f"Аргументы у переданной функции должны быть {valid_args}, сейчас {func_args}")
