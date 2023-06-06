@@ -81,20 +81,23 @@
                             <label for="formGroupExampleInput" class="form-label">Path to func in executable
                                 module:</label>
                             <input type="text" class="form-control path_to_func_in_executable_module_input"
-                                id="formGroupExampleInput">
+                                id="formGroupExampleInput" value="app.views.some_func">
 
                         </div>
 
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Line where func executed:</label>
                             <input type="text" class="form-control line_where_func_executed_input"
-                                id="formGroupExampleInput">
+                                id="formGroupExampleInput" value=9>
                         </div>
 
                         <div class="mb-3">
                             <label for="ModalDecoratorInnerFunc" class="form-label">Decorator inner func:</label>
                             <textarea id="ModalDecoratorInnerFunc" class="form-control decorator_inner_func_input"
-                                aria-label="With textarea" rows="10" style="height:100%;"></textarea>
+                                aria-label="With textarea" rows="10" style="height:100%;">def blabla(func, func_args, func_kwargs, frame):
+    print(func_args, func_kwargs)
+    return func(*func_args, **func_kwargs) 
+                            </textarea>
                         </div>
                         <label class="form-check-label" for="flexCheckDefault">
                             is method

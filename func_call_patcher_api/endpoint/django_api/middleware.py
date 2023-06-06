@@ -2,9 +2,8 @@ from typing import List
 
 from func_call_patcher import FuncCallPatcher, MultiFuncCallPatcher
 
-from func_call_patcher_api.func_call_patcher.register import __func_call_patcher_register__
-
-from .func_call_patcher.utils import FuncAsObjectFromStringGetter
+from func_call_patcher_api.logic.register import __func_call_patcher_register__
+from func_call_patcher_api.logic.utils import FuncAsObjectFromStringGetter
 
 
 class FuncCallPatcherMiddleware:
@@ -14,6 +13,7 @@ class FuncCallPatcherMiddleware:
     def __call__(self, request):
         patchers: List[FuncCallPatcher] = []
 
+        relationship_identifier = hash(request)
         for func_call_patcher_data in __func_call_patcher_register__.active_data.values():
             decorator_inner_func = FuncAsObjectFromStringGetter.exec(
                 func_as_str=func_call_patcher_data.decorator_inner_func_as_str,
@@ -24,6 +24,7 @@ class FuncCallPatcherMiddleware:
                     line_number_where_func_executed=func_call_patcher_data.line_number_where_func_executed,
                     decorator_inner_func=decorator_inner_func,
                     is_method=func_call_patcher_data.is_method,
+                    relationship_identifier=relationship_identifier,
                 ),
             )
 

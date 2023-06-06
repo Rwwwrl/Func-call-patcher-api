@@ -1,9 +1,8 @@
 import abc
-from typing import Dict, NewType
+from typing import Dict
 
-from attrs import define
-
-FuncCallPatherId = NewType('FuncCallPatherId', int)
+from . import hints
+from .value_objects import FuncCallPatcherData
 
 
 class NotFound(BaseException):
@@ -22,55 +21,45 @@ class PkGenerator:
         return current_value
 
 
-@define
-class FuncCallPatcherData:
-
-    is_active: bool
-    path_to_func_in_executable_module: str
-    line_number_where_func_executed: int
-    is_method: bool
-    decorator_inner_func_as_str: str
-
-
 class IFuncCallPatcherRegister(abc.ABC):
     def __init__(self):
-        self._data: Dict[FuncCallPatherId, FuncCallPatcherData] = {}
+        self._data: Dict[hints.FuncCallPatherId, FuncCallPatcherData] = {}
 
     @abc.abstractmethod
     def add(self, func_call_patcher_data: FuncCallPatcherData) -> None:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def remove(self, pk: FuncCallPatherId) -> None:
+    def remove(self, pk: hints.FuncCallPatherId) -> None:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def change_is_active_state(self, pk: FuncCallPatherId) -> None:
+    def change_is_active_state(self, pk: hints.FuncCallPatherId) -> None:
         raise NotImplementedError
 
     @abc.abstractproperty
-    def data(self) -> Dict[FuncCallPatherId, FuncCallPatcherData]:
+    def data(self) -> Dict[hints.FuncCallPatherId, FuncCallPatcherData]:
         raise NotImplementedError
 
     @abc.abstractproperty
-    def active_data(self) -> Dict[FuncCallPatherId, FuncCallPatcherData]:
+    def active_data(self) -> Dict[hints.FuncCallPatherId, FuncCallPatcherData]:
         raise NotImplementedError
 
 
 class FuncCallPatcherRegister(IFuncCallPatcherRegister):
     """реализация, которая хранит все в питоновской памяти"""
-    def add(self, func_call_patcher_data: FuncCallPatcherData) -> FuncCallPatherId:
+    def add(self, func_call_patcher_data: FuncCallPatcherData) -> hints.FuncCallPatherId:
         pk = PkGenerator.get_and_increase_pk()
         self.data[pk] = func_call_patcher_data
         return pk
 
-    def remove(self, pk: FuncCallPatherId) -> None:
+    def remove(self, pk: hints.FuncCallPatherId) -> None:
         try:
             del self.data[pk]
         except KeyError:
             raise NotFound(f'по ключу {pk} нет записи')
 
-    def change_is_active_state(self, pk: FuncCallPatherId) -> None:
+    def change_is_active_state(self, pk: hints.FuncCallPatherId) -> None:
         try:
             func_call_patcher_data = self.data[pk]
         except KeyError:
@@ -79,11 +68,11 @@ class FuncCallPatcherRegister(IFuncCallPatcherRegister):
             func_call_patcher_data.is_active = not func_call_patcher_data.is_active
 
     @property
-    def data(self) -> Dict[FuncCallPatherId, FuncCallPatcherData]:
+    def data(self) -> Dict[hints.FuncCallPatherId, FuncCallPatcherData]:
         return self._data
 
     @property
-    def active_data(self) -> Dict[FuncCallPatherId, FuncCallPatcherData]:
+    def active_data(self) -> Dict[hints.FuncCallPatherId, FuncCallPatcherData]:
         return {
             pk: func_call_patcher_data
             for (pk, func_call_patcher_data) in self.data.items() if func_call_patcher_data.is_active
