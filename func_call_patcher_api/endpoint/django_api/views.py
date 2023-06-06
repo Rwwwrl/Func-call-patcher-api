@@ -39,7 +39,7 @@ class FuncPatcherDetail(APIView):
         is_method = request.data['is_method']
         path_to_func_in_executable_module = request.data['path_to_func_in_executable_module']
         try:
-            line_number_where_func_executed = request.data['line_number_where_func_executed']
+            line_number_where_func_executed = int(request.data['line_number_where_func_executed'])
         except ValueError:
             self._bad_request_response(
                 error_text=f"""
