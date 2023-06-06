@@ -2,3 +2,4 @@ func_call_patcher
 django
 djangorestframework
 attrs
+dependency_injector
