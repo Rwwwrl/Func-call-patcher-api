@@ -1,6 +1,6 @@
 from typing import NewType
 
-FuncCallPatherId = NewType('FuncCallPatherId', int)
+FuncCallPatcherId = NewType('FuncCallPatherId', int)
 
 DecoratorInnerFuncAsStr = NewType('DecoratorInnerFuncAsStr', str)
 """

@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 
 from func_call_patcher.validators import BaseValidatationException
 
-from func_call_patcher_api.logic.register import __func_call_patcher_register__
+from func_call_patcher_api.dependency_container import __dependency_container__
 from func_call_patcher_api.service.crud_service import CRUDService
 
 from rest_framework import status
@@ -17,7 +17,7 @@ class FuncPatchersTemplateView(TemplateView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context_data = super().get_context_data()
-        context_data['patchers_data'] = __func_call_patcher_register__.data
+        context_data['patchers_data'] = __dependency_container__.func_call_patcher_data_register().data
         return context_data
 
 

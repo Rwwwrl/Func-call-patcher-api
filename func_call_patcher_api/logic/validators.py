@@ -2,7 +2,8 @@ from typing import List
 
 from func_call_patcher import validators
 
-from .register import __func_call_patcher_register__
+from func_call_patcher_api.dependency_container import __dependency_container__
+
 from .utils import FuncAsObjectFromStringGetter, FuncInvalidArgs
 
 
@@ -19,7 +20,7 @@ class FuncPathIsDuplicatedValidator(validators.IValidator):
     obj: str
 
     def validate(self) -> None:
-        for func_patch_data in __func_call_patcher_register__.data.values():
+        for func_patch_data in __dependency_container__.func_call_patcher_data_register().data.values():
             if func_patch_data.path_to_func_in_executable_module == self.obj:
                 raise FuncPathIsDuplicatedException(
                     f"Патч на функцию по пути {self.obj} уже есть, мы не можем запатчить одну и ту же функцию дважды",
