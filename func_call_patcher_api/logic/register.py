@@ -9,18 +9,6 @@ class NotFound(BaseException):
     pass
 
 
-class PkGenerator:
-
-    _current_seq_value: int = 1
-
-    @classmethod
-    def get_and_increase_pk(cls) -> int:
-        current_value = cls._current_seq_value
-        current_value
-        cls._current_seq_value += 1
-        return current_value
-
-
 class IFuncCallPatcherRegister(abc.ABC):
     @abc.abstractmethod
     def add(self, func_call_patcher_data: FuncCallPatcherData) -> None:
@@ -48,10 +36,8 @@ class InMemoryFuncCallPatcherDataRegister(IFuncCallPatcherRegister):
     def __init__(self):
         self._data: Dict[hints.FuncCallPatcherId, FuncCallPatcherData] = {}
 
-    def add(self, func_call_patcher_data: FuncCallPatcherData) -> hints.FuncCallPatcherId:
-        pk = PkGenerator.get_and_increase_pk()
-        self.data[pk] = func_call_patcher_data
-        return pk
+    def add(self, func_call_patcher_data: FuncCallPatcherData) -> None:
+        self.data[func_call_patcher_data.pk] = func_call_patcher_data
 
     def remove(self, pk: hints.FuncCallPatcherId) -> None:
         try:

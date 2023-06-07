@@ -21,6 +21,7 @@ class CRUDService:
         path_to_func_in_executable_module: str,
         line_number_where_func_executed: int,
     ) -> hints.FuncCallPatcherId:
+
         validate(
             decorator_inner_func_as_str=decorator_inner_func_as_str,
             is_method=is_method,
@@ -36,7 +37,5 @@ class CRUDService:
             decorator_inner_func_as_str=decorator_inner_func_as_str,
         )
 
-        new_patch_pk = __dependency_container__.func_call_patcher_data_register().add(
-            func_call_patcher_data=func_call_patch_data,
-        )
-        return new_patch_pk
+        __dependency_container__.func_call_patcher_data_register().add(func_call_patcher_data=func_call_patch_data)
+        return func_call_patch_data.pk

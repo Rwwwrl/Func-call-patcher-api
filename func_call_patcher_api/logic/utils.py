@@ -30,3 +30,14 @@ class FuncAsObjectFromStringGetter:
         func = locals()[func_name]
         cls._validate_args(func)
         return func
+
+
+class PkGenerator:
+
+    _current_seq_value: int = 1
+
+    @classmethod
+    def get_and_increase_pk(cls) -> int:
+        current_value = cls._current_seq_value
+        cls._current_seq_value += 1
+        return current_value
