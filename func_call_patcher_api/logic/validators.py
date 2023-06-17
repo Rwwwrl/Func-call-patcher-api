@@ -2,29 +2,11 @@ from typing import List
 
 from func_call_patcher import validators
 
-from func_call_patcher_api.dependency_container import __dependency_container__
-
 from .utils import FuncAsObjectFromStringGetter, FuncInvalidArgs
-
-
-class FuncPathIsDuplicatedException(validators.BaseValidatationException):
-    pass
 
 
 class DecoratorInnerFuncIsIncorrect(validators.BaseValidatationException):
     pass
-
-
-class FuncPathIsDuplicatedValidator(validators.IValidator):
-
-    obj: str
-
-    def validate(self) -> None:
-        for func_patch_data in __dependency_container__.func_call_patcher_data_register().data.values():
-            if func_patch_data.path_to_func_in_executable_module == self.obj:
-                raise FuncPathIsDuplicatedException(
-                    f"Патч на функцию по пути {self.obj} уже есть, мы не можем запатчить одну и ту же функцию дважды",
-                )
 
 
 class DecoratorInnerFuncIncorrectValidator(validators.IValidator):
@@ -43,16 +25,17 @@ class DecoratorInnerFuncIncorrectValidator(validators.IValidator):
 def validate(
     decorator_inner_func_as_str: str,
     is_method: bool,
-    path_to_func_in_executable_module: str,
+    path_to_func: str,
+    executable_module_name: str,
     line_number_where_func_executed: int,
 ) -> None:
     validators.validate(
         line_number_where_func_executed=line_number_where_func_executed,
-        path_to_func_in_executable_module=path_to_func_in_executable_module,
+        executable_module_name=executable_module_name,
+        path_to_func=path_to_func,
         is_method=is_method,
     )
     validators_ext: List[validators.IValidator] = [
-        FuncPathIsDuplicatedValidator(obj=path_to_func_in_executable_module),
         DecoratorInnerFuncIncorrectValidator(obj=decorator_inner_func_as_str),
     ]
     for validator in validators_ext:
