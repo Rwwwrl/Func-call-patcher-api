@@ -3,8 +3,9 @@ let button_to_add_patch = document.querySelector(".button_to_add_patch");
 let alert_block = document.querySelector(".alert_block");
 
 let modal = document.querySelector(".modal");
-let modal_path_to_func_in_executable_module_input = document.querySelector(
-  ".path_to_func_in_executable_module_input"
+let modal_path_to_func_input = document.querySelector(".path_to_func");
+let modal_executable_module_name_input = document.querySelector(
+  ".executable_module_name"
 );
 let modal_line_where_func_executed_input = document.querySelector(
   ".line_where_func_executed_input"
@@ -106,14 +107,16 @@ function set_on_click_to_trow_buttons() {
 }
 
 function clear_modal_inputs() {
-  modal_path_to_func_in_executable_module_input.value = "";
+  modal_path_to_func_input.value = "";
+  modal_executable_module_name_input.value = "";
   modal_line_where_func_executed_input.value = "";
   modal_decorator_inner_func_input.value = "";
   modal_is_method_input_checkbox.checked = false;
 }
 
 function create_row_with_patch_data(
-  path_to_func_in_executable_module,
+  path_to_func,
+  executable_module_name,
   line_number_where_func_executed,
   decorator_inner_func,
   is_method,
@@ -124,7 +127,8 @@ function create_row_with_patch_data(
   t_row.classList.add("patcher_data");
   t_row.innerHTML = `
     <td class="patcher_data_is_active_field active_true">1</td>
-    <td>${path_to_func_in_executable_module}</td>
+    <td>${path_to_func}</td>
+    <td>${executable_module_name}</td>
     <td>${line_number_where_func_executed}</td>
     <td>${is_method ? 1 : 0}</td>
     <td>
@@ -176,8 +180,8 @@ modal_approve_button.addEventListener("click", () => {
   fetch("/func_patcher_api/func_patcher_detail/", {
     method: "POST",
     body: JSON.stringify({
-      path_to_func_in_executable_module:
-        modal_path_to_func_in_executable_module_input.value,
+      path_to_func: modal_path_to_func_input.value,
+      executable_module_name: modal_executable_module_name_input.value,
       line_number_where_func_executed:
         modal_line_where_func_executed_input.value,
       decorator_inner_func: modal_decorator_inner_func_input.value,
@@ -193,7 +197,8 @@ modal_approve_button.addEventListener("click", () => {
     })
     .then((response) => {
       create_row_with_patch_data(
-        modal_path_to_func_in_executable_module_input.value,
+        modal_path_to_func_input.value,
+        modal_executable_module_name_input.value,
         modal_line_where_func_executed_input.value,
         modal_decorator_inner_func_input.value,
         modal_is_method_input_checkbox.checked,

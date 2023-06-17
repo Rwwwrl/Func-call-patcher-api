@@ -21,10 +21,11 @@
             <thead>
                 <tr>
                     <th scope="col">is_active</th>
-                    <th scope="col">path_to_func_in_executable_module</th>
+                    <th scope="col">path_to_func</th>
+                    <th scope="col">executable_module_name</th>
                     <th scope="col">line_number_where_func_executed</th>
-                    <th scope="col">is method</th>
-                    <th scope="col">decorator inner func</th>
+                    <th scope="col">is_method</th>
+                    <th scope="col">decorator_inner_func</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
                 </tr>
@@ -37,7 +38,8 @@
                     {% else %}
                     <td class="patcher_data_is_active_field active_false">0</td>
                     {% endif %}
-                    <td>{{ patcher_data.path_to_func_in_executable_module }}</td>
+                    <td>{{ patcher_data.path_to_func }}</td>
+                    <td>{{ patcher_data.executable_module_name }}</td>
                     <td>{{ patcher_data.line_number_where_func_executed }}</td>
                     {% if patcher_data.is_method %}
                     <td>1</td>
@@ -78,21 +80,26 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Path to func in executable
-                                module:</label>
-                            <input type="text" class="form-control path_to_func_in_executable_module_input"
-                                id="formGroupExampleInput" value="app.views.some_func">
+                            <label for="formGroupExampleInput" class="form-label">path to func</label>
+                            <input type="text" class="form-control path_to_func" id="formGroupExampleInput"
+                                value="app.views.some_func">
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">executable module name</label>
+                            <input type="text" class="form-control executable_module_name" id="formGroupExampleInput"
+                                value="views.py">
 
                         </div>
 
                         <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Line where func executed:</label>
+                            <label for="formGroupExampleInput" class="form-label">line where func executed:</label>
                             <input type="text" class="form-control line_where_func_executed_input"
                                 id="formGroupExampleInput" value=9>
                         </div>
 
                         <div class="mb-3">
-                            <label for="ModalDecoratorInnerFunc" class="form-label">Decorator inner func:</label>
+                            <label for="ModalDecoratorInnerFunc" class="form-label">decorator inner func:</label>
                             <textarea id="ModalDecoratorInnerFunc" class="form-control decorator_inner_func_input"
                                 aria-label="With textarea" rows="10" style="height:100%;">def blabla(func, func_args, func_kwargs, frame,  relationship_identifier):
     print(func_args, func_kwargs)

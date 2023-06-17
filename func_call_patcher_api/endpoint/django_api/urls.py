@@ -1,8 +1,8 @@
 from django.urls import path
 
-from .views import FuncPatcherDetail, FuncPatchersTemplateView
+from .views import FuncPatcherDetail, FuncPatcherTemplateView
 
 urlpatterns = [
-    path('', FuncPatchersTemplateView.as_view()),
+    path('', FuncPatcherTemplateView.as_view()),
     path('func_patcher_detail/', FuncPatcherDetail.as_view()),
 ]

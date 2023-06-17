@@ -18,24 +18,29 @@ class CRUDService:
     def create_new_func_call_patcher_data(
         decorator_inner_func_as_str: hints.DecoratorInnerFuncAsStr,
         is_method: bool,
-        path_to_func_in_executable_module: str,
+        path_to_func: str,
+        executable_module_name: str,
         line_number_where_func_executed: int,
     ) -> hints.FuncCallPatcherId:
 
         validate(
             decorator_inner_func_as_str=decorator_inner_func_as_str,
             is_method=is_method,
-            path_to_func_in_executable_module=path_to_func_in_executable_module,
+            path_to_func=path_to_func,
+            executable_module_name=executable_module_name,
             line_number_where_func_executed=line_number_where_func_executed,
         )
 
         func_call_patch_data = FuncCallPatcherData(
             is_active=True,
-            path_to_func_in_executable_module=path_to_func_in_executable_module,
+            path_to_func=path_to_func,
+            executable_module_name=executable_module_name,
             line_number_where_func_executed=line_number_where_func_executed,
             is_method=is_method,
             decorator_inner_func_as_str=decorator_inner_func_as_str,
         )
 
-        __dependency_container__.func_call_patcher_data_register().add(func_call_patcher_data=func_call_patch_data)
-        return func_call_patch_data.pk
+        pk_of_created_record = __dependency_container__.func_call_patcher_data_register().add(
+            func_call_patcher_data=func_call_patch_data,
+        )
+        return pk_of_created_record

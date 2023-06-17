@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
-class FuncPatchersTemplateView(TemplateView):
+class FuncPatcherTemplateView(TemplateView):
     template_name = 'django_api/index.html'
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
@@ -37,7 +37,8 @@ class FuncPatcherDetail(APIView):
     def post(self, request):
         decorator_inner_func_as_str = request.data['decorator_inner_func']
         is_method = request.data['is_method']
-        path_to_func_in_executable_module = request.data['path_to_func_in_executable_module']
+        path_to_func = request.data['path_to_func']
+        executable_module_name = request.data['executable_module_name']
         try:
             line_number_where_func_executed = int(request.data['line_number_where_func_executed'])
         except ValueError:
@@ -52,7 +53,8 @@ class FuncPatcherDetail(APIView):
             new_patch_pk = CRUDService.create_new_func_call_patcher_data(
                 decorator_inner_func_as_str=decorator_inner_func_as_str,
                 is_method=is_method,
-                path_to_func_in_executable_module=path_to_func_in_executable_module,
+                path_to_func=path_to_func,
+                executable_module_name=executable_module_name,
                 line_number_where_func_executed=line_number_where_func_executed,
             )
         except BaseValidatationException as e:

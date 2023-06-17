@@ -20,7 +20,8 @@ class FuncCallPatcherMiddleware:
             )
             patchers.append(
                 FuncCallPatcher(
-                    path_to_func_in_executable_module=func_call_patcher_data.path_to_func_in_executable_module,
+                    path_to_func=func_call_patcher_data.path_to_func,
+                    executable_module_name=func_call_patcher_data.executable_module_name,
                     line_number_where_func_executed=func_call_patcher_data.line_number_where_func_executed,
                     decorator_inner_func=decorator_inner_func,
                     is_method=func_call_patcher_data.is_method,
@@ -28,9 +29,5 @@ class FuncCallPatcherMiddleware:
                 ),
             )
 
-        try:
-            with MultiFuncCallPatcher(*patchers):
-                return self.get_response(request)
-        except Exception:
-            # мы при любой ошибке должны обработать реквест должным образом
+        with MultiFuncCallPatcher(*patchers):
             return self.get_response(request)

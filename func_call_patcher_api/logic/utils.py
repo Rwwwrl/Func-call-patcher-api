@@ -33,11 +33,10 @@ class FuncAsObjectFromStringGetter:
 
 
 class PkGenerator:
+    def __init__(self):
+        self._current_seq_value = 1
 
-    _current_seq_value: int = 1
-
-    @classmethod
-    def get_and_increase_pk(cls) -> int:
-        current_value = cls._current_seq_value
-        cls._current_seq_value += 1
+    def get_and_increase_pk(self) -> int:
+        current_value = self._current_seq_value
+        self._current_seq_value += 1
         return current_value
