@@ -3,3 +3,5 @@ django
 djangorestframework
 attrs
 dependency_injector
+pytest
+mock
