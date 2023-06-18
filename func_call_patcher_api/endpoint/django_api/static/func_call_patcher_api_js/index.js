@@ -202,7 +202,7 @@ modal_approve_button.addEventListener("click", () => {
         modal_line_where_func_executed_input.value,
         modal_decorator_inner_func_input.value,
         modal_is_method_input_checkbox.checked,
-        response["new_patch_pk"]
+        response["created_patch_data_pk"]
       );
       clear_modal_inputs();
     })
