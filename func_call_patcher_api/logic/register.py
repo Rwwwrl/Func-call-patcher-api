@@ -1,7 +1,8 @@
 import abc
 from typing import Dict
 
-from . import hints
+from func_call_patcher_api import hints
+
 from .func_call_patcher_data import FuncCallPatcherData
 from .utils import PkGenerator
 
