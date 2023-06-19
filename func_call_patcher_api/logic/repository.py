@@ -21,11 +21,11 @@ class IFuncCallPatcherRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def remove(self, pk: hints.FuncCallPatcherId) -> None:
+    def delete(self, pk: hints.FuncCallPatcherId) -> None:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def change_is_active_state(self, pk: hints.FuncCallPatcherId) -> None:
+    def change_active_state_to_opposite(self, pk: hints.FuncCallPatcherId) -> None:
         raise NotImplementedError
 
     @abc.abstractproperty
@@ -45,22 +45,22 @@ class InMemoryRepository(IFuncCallPatcherRepository):
 
     def add(self, func_call_patcher_data: FuncCallPatcherData) -> hints.FuncCallPatcherId:
         pk = self.pk_generator.get_and_increase_pk()
-        self.all[pk] = func_call_patcher_data
+        self._data[pk] = func_call_patcher_data
         return pk
 
     def get(self, pk: hints.FuncCallPatcherId) -> FuncCallPatcherData:
         try:
-            return self.all[pk]
+            return self._data[pk]
         except KeyError:
             raise NotFound(f'по ключу {pk} нет записи')
 
-    def remove(self, pk: hints.FuncCallPatcherId) -> None:
+    def delete(self, pk: hints.FuncCallPatcherId) -> None:
         try:
-            del self.all[pk]
+            del self._data[pk]
         except KeyError:
             raise NotFound(f'по ключу {pk} нет записи')
 
-    def change_is_active_state(self, pk: hints.FuncCallPatcherId) -> None:
+    def change_active_state_to_opposite(self, pk: hints.FuncCallPatcherId) -> None:
         func_call_patcher_data = self.get(pk=pk)
         func_call_patcher_data.is_active = not func_call_patcher_data.is_active
 

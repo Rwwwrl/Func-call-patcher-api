@@ -20,11 +20,11 @@ class CRUDService:
                 executable_module_name=record.executable_module_name,
                 line_number_where_func_executed=record.line_number_where_func_executed,
             )
-        repository.change_is_active_state(pk=pk)
+        repository.change_active_state_to_opposite(pk=pk)
 
     @staticmethod
     def delete(pk: hints.FuncCallPatcherId) -> None:
-        __dependency_container__.repository_factory().remove(pk=pk)
+        __dependency_container__.repository_factory().delete(pk=pk)
 
     @staticmethod
     def create_new_func_call_patcher_data(
