@@ -21,13 +21,13 @@ class FuncPatcherTemplateView(TemplateView):
         return context_data
 
 
-class FuncPatcherDetail(APIView):
+class FuncPatcherDetailApiView(APIView):
     def put(self, request):
-        CRUDService.update_is_active_state(pk=int(request['func_patcher_pk']))
+        CRUDService.update_is_active_state(pk=int(request.data['func_patcher_pk']))
         return Response(status=status.HTTP_200_OK)
 
     def delete(self, request):
-        CRUDService.delete(pk=int(request.data["func_patcher_pk"]))
+        CRUDService.delete(pk=int(request.data['func_patcher_pk']))
         return Response(status=status.HTTP_200_OK)
 
     @staticmethod
@@ -50,7 +50,7 @@ class FuncPatcherDetail(APIView):
             )
 
         try:
-            new_patch_pk = CRUDService.create_new_func_call_patcher_data(
+            created_patch_data_pk = CRUDService.create_new_func_call_patcher_data(
                 decorator_inner_func_as_str=decorator_inner_func_as_str,
                 is_method=is_method,
                 path_to_func=path_to_func,
@@ -60,4 +60,4 @@ class FuncPatcherDetail(APIView):
         except BaseValidatationException as e:
             return self._bad_request_response(str(e))
         else:
-            return Response({'new_patch_pk': new_patch_pk}, status=status.HTTP_200_OK)
+            return Response({'created_patch_data_pk': created_patch_data_pk}, status=status.HTTP_200_OK)
