@@ -14,7 +14,7 @@ class FuncCallPatcherMiddleware:
         patchers: List[FuncCallPatcher] = []
 
         relationship_identifier = hash(request)
-        for func_call_patcher_data in __dependency_container__.func_call_patcher_data_register().active_data.values():
+        for func_call_patcher_data in __dependency_container__.repository_factory().active.values():
             decorator_inner_func = FuncAsObjectFromStringGetter.exec(
                 func_as_str=func_call_patcher_data.decorator_inner_func_as_str,
             )

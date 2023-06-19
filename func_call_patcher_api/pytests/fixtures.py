@@ -1,17 +1,17 @@
 from func_call_patcher_api.dependency_container import __dependency_container__
 from func_call_patcher_api.logic.func_call_patcher_data import FuncCallPatcherData
-from func_call_patcher_api.logic.register import InMemoryFuncCallPatcherDataRegister
+from func_call_patcher_api.logic.repository import InMemoryRepository
 from func_call_patcher_api.pytests.utils import YieldFixture
 
 import pytest
 
 
 @pytest.fixture(scope='function')
-def mock_func_patcher_data_register() -> YieldFixture[InMemoryFuncCallPatcherDataRegister]:
-    register = InMemoryFuncCallPatcherDataRegister()
-    override = __dependency_container__.func_call_patcher_data_register.override(register)
+def mock_func_patcher_data_register() -> YieldFixture[InMemoryRepository]:
+    register = InMemoryRepository()
+    override = __dependency_container__.repository_factory.override(register)
     override.__enter__()
-    yield __dependency_container__.func_call_patcher_data_register()
+    yield __dependency_container__.repository_factory()
     override.__exit__()
 
 

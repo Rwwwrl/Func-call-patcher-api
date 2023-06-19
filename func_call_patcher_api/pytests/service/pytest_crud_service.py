@@ -1,5 +1,5 @@
 from func_call_patcher_api.logic.func_call_patcher_data import FuncCallPatcherData
-from func_call_patcher_api.logic.register import InMemoryFuncCallPatcherDataRegister
+from func_call_patcher_api.logic.repository import InMemoryRepository
 from func_call_patcher_api.service import crud_service
 from func_call_patcher_api.service.crud_service import CRUDService
 
@@ -9,35 +9,35 @@ from mock import Mock, patch
 class TestCRUDService:
     def test_update_is_active_state(
         self,
-        mock_func_patcher_data_register: InMemoryFuncCallPatcherDataRegister,
+        mock_func_patcher_data_register: InMemoryRepository,
         func_patcher_test_data: FuncCallPatcherData,
     ):
         PK = 1
         mock_func_patcher_data_register._data = {PK: func_patcher_test_data}
 
-        assert mock_func_patcher_data_register.data[PK].is_active is True
+        assert mock_func_patcher_data_register.all[PK].is_active is True
         CRUDService.update_is_active_state(pk=PK)
-        assert mock_func_patcher_data_register.data[PK].is_active is False
+        assert mock_func_patcher_data_register.all[PK].is_active is False
 
     def test_delete(
         self,
-        mock_func_patcher_data_register: InMemoryFuncCallPatcherDataRegister,
+        mock_func_patcher_data_register: InMemoryRepository,
         func_patcher_test_data: FuncCallPatcherData,
     ):
         PK = 1
         mock_func_patcher_data_register._data = {PK: func_patcher_test_data}
 
-        assert mock_func_patcher_data_register.data.get(PK, None)
+        assert mock_func_patcher_data_register.all.get(PK, None)
         CRUDService.delete(pk=PK)
-        assert mock_func_patcher_data_register.data.get(PK, None) is None
+        assert mock_func_patcher_data_register.all.get(PK, None) is None
 
     @patch.object(crud_service, 'validate')
     def test_create_new_func_call_patcher_data(
         self,
         mock_validate: Mock,
-        mock_func_patcher_data_register: InMemoryFuncCallPatcherDataRegister,
+        mock_func_patcher_data_register: InMemoryRepository,
     ):
-        assert mock_func_patcher_data_register.data == {}
+        assert mock_func_patcher_data_register.all == {}
         pk_of_created_record = CRUDService.create_new_func_call_patcher_data(
             decorator_inner_func_as_str='decorator_inner_func_as_str',
             is_method=True,
@@ -53,7 +53,7 @@ class TestCRUDService:
             line_number_where_func_executed=10,
         )
         assert pk_of_created_record == 1
-        created_func_call_patcher_data = mock_func_patcher_data_register.data.get(pk_of_created_record, None)
+        created_func_call_patcher_data = mock_func_patcher_data_register.all.get(pk_of_created_record, None)
         assert created_func_call_patcher_data is not None
         assert created_func_call_patcher_data.is_active is True
         assert created_func_call_patcher_data.path_to_func == 'path_to_func'
