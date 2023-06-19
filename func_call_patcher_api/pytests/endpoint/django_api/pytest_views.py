@@ -41,7 +41,7 @@ class TestFuncPatcherTemplateView:
 
 class TestFuncPatcherDetailApiView:
     @patch.object(CRUDService, 'update_is_active_state')
-    def test_put(
+    def test_put_200(
         self,
         mock_crud_service__update_is_active_state: Mock,
         django_setup: None,
@@ -58,6 +58,27 @@ class TestFuncPatcherDetailApiView:
         response = FuncPatcherDetailApiView.as_view()(request)
 
         assert response.status_code == 200
+        mock_crud_service__update_is_active_state.assert_called_once_with(pk=1)
+
+    @patch.object(CRUDService, 'update_is_active_state')
+    def test_put_400(
+        self,
+        mock_crud_service__update_is_active_state: Mock,
+        django_setup: None,
+        func_patcher_detail_url: str,
+    ):
+        from rest_framework.test import APIRequestFactory
+
+        from func_call_patcher_api.endpoint.django_api.views import FuncPatcherDetailApiView
+
+        mock_crud_service__update_is_active_state.side_effect = BaseValidatationException('text of exception')
+        factory = APIRequestFactory()
+        data = {'func_patcher_pk': '1'}
+        request = factory.put(path=func_patcher_detail_url, data=data, format='json')
+        response = FuncPatcherDetailApiView.as_view()(request)
+
+        assert response.status_code == 400
+        assert response.data == {'exception': 'text of exception'}
         mock_crud_service__update_is_active_state.assert_called_once_with(pk=1)
 
     @patch.object(CRUDService, 'delete')

@@ -7,17 +7,31 @@ from mock import Mock, patch
 
 
 class TestCRUDService:
+    @patch.object(crud_service, 'validate')
     def test_update_is_active_state(
         self,
+        mock_validate: Mock,
         mock_func_patcher_data_register: InMemoryRepository,
         func_patcher_test_data: FuncCallPatcherData,
     ):
         PK = 1
+        mock_validate.return_value = None
+
         mock_func_patcher_data_register._data = {PK: func_patcher_test_data}
 
         assert mock_func_patcher_data_register.all[PK].is_active is True
         CRUDService.update_is_active_state(pk=PK)
+        mock_validate.assert_not_called()
         assert mock_func_patcher_data_register.all[PK].is_active is False
+
+        CRUDService.update_is_active_state(pk=PK)
+        mock_validate.assert_called_once_with(
+            path_to_func='path_to_func',
+            executable_module_name='executable_module_name',
+            line_number_where_func_executed=10,
+            is_method=True,
+            decorator_inner_func_as_str='decorator_inner_func_as_str',
+        )
 
     def test_delete(
         self,

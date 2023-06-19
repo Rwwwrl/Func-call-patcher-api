@@ -22,17 +22,20 @@ class FuncPatcherTemplateView(TemplateView):
 
 
 class FuncPatcherDetailApiView(APIView):
+    @staticmethod
+    def _bad_request_response(error_text: str) -> Response:
+        return Response({'exception': error_text}, status=status.HTTP_400_BAD_REQUEST)
+
     def put(self, request):
-        CRUDService.update_is_active_state(pk=int(request.data['func_patcher_pk']))
+        try:
+            CRUDService.update_is_active_state(pk=int(request.data['func_patcher_pk']))
+        except BaseValidatationException as e:
+            return self._bad_request_response(error_text=str(e))
         return Response(status=status.HTTP_200_OK)
 
     def delete(self, request):
         CRUDService.delete(pk=int(request.data['func_patcher_pk']))
         return Response(status=status.HTTP_200_OK)
-
-    @staticmethod
-    def _bad_request_response(error_text: str) -> Response:
-        return Response({'exception': error_text}, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request):
         decorator_inner_func_as_str = request.data['decorator_inner_func']
