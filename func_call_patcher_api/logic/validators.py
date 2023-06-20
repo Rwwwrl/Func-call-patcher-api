@@ -19,7 +19,7 @@ class DecoratorInnerFuncIncorrectValidator(validators.IValidator):
         except FuncInvalidArgs as e:
             raise e
         except Exception:
-            raise DecoratorInnerFuncIsIncorrect("decorator_inner_func не является валидной")
+            raise DecoratorInnerFuncIsIncorrect('decorator_inner_func не является валидной')
 
 
 def validate(

@@ -40,11 +40,20 @@ function on_click_to_change_active_state(func_patcher_pk, tr_el) {
     method: "PUT",
     body: JSON.stringify({ func_patcher_pk: func_patcher_pk }),
     headers: { "Content-Type": "application/json" },
-  }).then((response) => {
-    if (response.ok) {
-      change_is_active_state_to_opposite(tr_el);
-    }
-  });
+  })
+    .then((response) => {
+      if (response.ok) {
+        change_is_active_state_to_opposite(tr_el);
+      }
+      return Promise.reject(response);
+    })
+    .catch((response) => {
+      if (response.status == 400) {
+        response.json().then((invalid_response) => {
+          create_and_add_alert_block(invalid_response["exception"]);
+        });
+      }
+    });
 }
 // END on click section
 
@@ -63,6 +72,17 @@ const zip = (...arr) => {
   });
   return zipped;
 };
+
+function create_and_add_alert_block(alert_message) {
+  let new_alert = document.createElement("div");
+  new_alert.innerHTML = `
+                <div class="alert alert-danger" role="alert">
+                ${alert_message} 
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                `;
+  alert_block.append(new_alert);
+}
 
 function change_is_active_state_to_opposite(tr_el) {
   let opposite_value = (+!Boolean(Number(tr_el.innerText))).toString();
@@ -209,14 +229,7 @@ modal_approve_button.addEventListener("click", () => {
     .catch((response) => {
       if (response.status == 400) {
         response.json().then((invalid_response) => {
-          let new_alert = document.createElement("div");
-          new_alert.innerHTML = `
-                <div class="alert alert-danger" role="alert">
-                ${invalid_response["exception"]} 
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                `;
-          alert_block.append(new_alert);
+          create_and_add_alert_block(invalid_response["exception"]);
         });
       }
     });
