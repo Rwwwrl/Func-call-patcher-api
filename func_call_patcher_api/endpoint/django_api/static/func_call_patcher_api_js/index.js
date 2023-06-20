@@ -27,7 +27,7 @@ function on_click_to_delete_func_patch(func_patcher_pk, t_row) {
   fetch("/func_patcher_api/func_patcher_detail/", {
     method: "DELETE",
     body: JSON.stringify({ func_patcher_pk: func_patcher_pk }),
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "X-CSRFToken": get_csrf() },
   }).then((response) => {
     if (response.ok) {
       delete_row_from_table(t_row);
@@ -39,7 +39,7 @@ function on_click_to_change_active_state(func_patcher_pk, tr_el) {
   fetch("/func_patcher_api/func_patcher_detail/", {
     method: "PUT",
     body: JSON.stringify({ func_patcher_pk: func_patcher_pk }),
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "X-CSRFToken": get_csrf() },
   })
     .then((response) => {
       if (response.ok) {
@@ -56,7 +56,12 @@ function on_click_to_change_active_state(func_patcher_pk, tr_el) {
     });
 }
 // END on click section
-
+function get_csrf() {
+  const csrf_token = document.querySelector(
+    "input[name=csrfmiddlewaretoken]"
+  ).value;
+  return csrf_token;
+}
 const zip = (...arr) => {
   const zipped = [];
   arr.forEach((element, ind) => {
@@ -207,7 +212,7 @@ modal_approve_button.addEventListener("click", () => {
       decorator_inner_func: modal_decorator_inner_func_input.value,
       is_method: modal_is_method_input_checkbox.checked,
     }),
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "X-CSRFToken": get_csrf() },
   })
     .then((response) => {
       if (response.ok) {
