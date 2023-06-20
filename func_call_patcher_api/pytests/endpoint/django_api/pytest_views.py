@@ -30,12 +30,9 @@ class TestFuncPatcherTemplateView:
         factory = APIRequestFactory()
         request = factory.get(base_template_page_url)
 
-        view = FuncPatcherTemplateView()
-        view.setup(request=request)
+        response = FuncPatcherTemplateView.as_view()(request)
 
-        context_data = view.get_context_data()
-
-        patchers_data = context_data.get('patchers_data', None)
+        patchers_data = response.context_data.get('patchers_data', None)
         assert patchers_data is not None
 
 
