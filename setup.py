@@ -5,6 +5,7 @@ requirements = [
     'django',
     'djangorestframework',
     'attrs',
+    'dependency_injector',
 ]
 
 setup(
