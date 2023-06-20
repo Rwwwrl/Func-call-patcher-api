@@ -11,7 +11,7 @@ class FuncInvalidArgs(BaseValidatationException):
 class FuncAsObjectFromStringGetter:
     @staticmethod
     def _get_name_of_func_from_str(func_as_str: str) -> str:
-        first_line = func_as_str.split("\n")[0]
+        first_line = func_as_str.split('\n')[0]
         pattern = re.compile("(?<=def )(.*?)(?=\()")    # noqa
         name_of_func = re.findall(pattern, first_line)[0]
         return name_of_func
@@ -19,9 +19,9 @@ class FuncAsObjectFromStringGetter:
     @staticmethod
     def _validate_args(func: Callable):
         valid_args = ('func', 'func_args', 'func_kwargs', 'frame', 'relationship_identifier')
-        func_args = func.__code__.co_varnames
+        func_args = func.__code__.co_varnames[:func.__code__.co_argcount]
         if func_args != valid_args:
-            raise FuncInvalidArgs(f"Аргументы у переданной функции должны быть {valid_args}, сейчас {func_args}")
+            raise FuncInvalidArgs(f'Аргументы у переданной функции должны быть {valid_args}, сейчас {func_args}')
 
     @classmethod
     def exec(cls, func_as_str: str) -> Callable:
